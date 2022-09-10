@@ -22,13 +22,13 @@ func main() {
 	http.HandleFunc("/", httpRoot)
 	http.HandleFunc("/headers", httpHeaders)
 
-	panic(http.ListenAndServe(":"+getDefaultEnv("PORT", "8080"), nil))
+	panic(http.ListenAndServe(":"+getDefEnv("PORT", "8080"), nil))
 }
 
-func getDefaultEnv(env string, def string) (v string) {
-	v = os.Getenv(env)
-	if v == "" {
-		return def
+func getDefEnv(env string, def string) (res string) {
+	res = os.Getenv(env)
+	if res == "" {
+		res = def
 	}
-	return v
+	return
 }
