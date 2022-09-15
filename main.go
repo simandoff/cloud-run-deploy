@@ -7,7 +7,7 @@ import (
 )
 
 func httpRoot(w http.ResponseWriter, req *http.Request) {
-	fmt.Fprintf(w, "<h1>Home of Acuzio.watch!</h1>")
+	fmt.Fprintf(w, "<h1>Home of index!</h1>")
 }
 
 func httpHeaders(w http.ResponseWriter, req *http.Request) {
