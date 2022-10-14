@@ -7,7 +7,7 @@ import (
 )
 
 func httpRoot(w http.ResponseWriter, req *http.Request) {
-	fmt.Fprintf(w, "<h1>Home of index!</h1>")
+	fmt.Fprintf(w, "<h1>Home of APIs!</h1>")
 }
 
 func httpHeaders(w http.ResponseWriter, req *http.Request) {
@@ -18,22 +18,26 @@ func httpHeaders(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+const (
+	pathStatic = "static"
+	portVar    = "PORT"
+	portValue  = "8080"
+)
+
 func main() {
 	mux := http.NewServeMux()
-	fs := http.FileServer(http.Dir("./static"))
 
-	mux.Handle("/static", http.StripPrefix("/static", fs))
+	mux.HandleFunc("/api/test", httpRoot)
+	mux.HandleFunc("/api/h", httpHeaders)
 
-	mux.HandleFunc("/", httpRoot)
-	mux.HandleFunc("/headers", httpHeaders)
-	mux.HandleFunc("/h", httpHeaders)
+	fs := http.FileServer(http.Dir("./" + pathStatic))
+	mux.Handle("/", fs)
 	
-	panic(http.ListenAndServe(":"+os.GetEnvDev("PORT", "8080"), mux))
+	panic(http.ListenAndServe(":"+getEnvDef(portVar, portValue), mux))
 }
 
-
-func (o os) GetEnvDef(env string, def string) (r string) {
-	r = o.Getenv(env)
+func getEnvDef(env string, def string) (r string) {
+	r = os.Getenv(env)
 	if r == "" {
 		r = def
 	}
