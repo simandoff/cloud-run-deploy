@@ -19,16 +19,23 @@ func httpHeaders(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/", httpRoot)
-	http.HandleFunc("/headers", httpHeaders)
+	mux := http.NewServeMux()
+	fs := http.FileServer(http.Dir("./static"))
 
-	panic(http.ListenAndServe(":"+getDefEnv("PORT", "8080"), nil))
+	mux.Handle("/static", http.StripPrefix("/static", fs))
+
+	mux.HandleFunc("/", httpRoot)
+	mux.HandleFunc("/headers", httpHeaders)
+	mux.HandleFunc("/h", httpHeaders)
+	
+	panic(http.ListenAndServe(":"+os.GetEnvDev("PORT", "8080"), mux))
 }
 
-func getDefEnv(env string, def string) (res string) {
-	res = os.Getenv(env)
-	if res == "" {
-		res = def
+
+func (o os) GetEnvDef(env string, def string) (r string) {
+	r = o.Getenv(env)
+	if r == "" {
+		r = def
 	}
-	return
+	return r
 }
