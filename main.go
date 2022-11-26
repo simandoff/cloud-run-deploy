@@ -30,9 +30,10 @@ func main() {
 	mux.HandleFunc("/api/test", httpRoot)
 	mux.HandleFunc("/api/h", httpHeaders)
 
-	fs := http.FileServer(http.Dir("./" + pathStatic))
+	fs := http.FileServer(http.Dir("./static"))
 	mux.Handle("/static", fs)
-	
+	mux.Handle("/", fs)
+
 	panic(http.ListenAndServe(":"+getEnvDef(portVar, portValue), mux))
 }
 
