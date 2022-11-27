@@ -19,7 +19,7 @@ func httpHeaders(w http.ResponseWriter, req *http.Request) {
 }
 
 const (
-	pathStatic = "static"
+	pathStatic = "/static/"
 	portVar    = "PORT"
 	portValue  = "8080"
 )
@@ -30,9 +30,8 @@ func main() {
 	mux.HandleFunc("/api/test", httpRoot)
 	mux.HandleFunc("/api/h", httpHeaders)
 
-	fs := http.FileServer(http.Dir("./static"))
-	mux.Handle("/static", fs)
-	mux.Handle("/", fs)
+	fileHandler := http.StripPrefix(pathStatic, http.FileServer(http.Dir("."+pathStatic)))
+	mux.Handle(pathStatic, fileHandler)
 
 	panic(http.ListenAndServe(":"+getEnvDef(portVar, portValue), mux))
 }
