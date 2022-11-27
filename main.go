@@ -28,7 +28,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/api/test", httpRoot)
-	mux.HandleFunc("/api/h", httpHeaders)
+	mux.HandleFunc("/api/h2", httpHeaders)
 
 	fileHandler := http.StripPrefix(pathStatic, http.FileServer(http.Dir("."+pathStatic)))
 	mux.Handle(pathStatic, fileHandler)
